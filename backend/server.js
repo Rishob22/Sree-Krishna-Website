@@ -157,7 +157,7 @@ app.post('/confirm-booking', async (req, res) => {
         res.status(200).json({ message: 'Booking confirmed and email sent!' });
     } catch (error) {
         console.error('Error confirming booking:', error);
-        res.status(500).json({ message: 'Failed to confirm booking.' });
+        res.status(500).json({ message: 'Sorry!Failed to confirm booking.' });
     }
 });
 
