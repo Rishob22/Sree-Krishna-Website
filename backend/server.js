@@ -1,13 +1,20 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
-const cors = require('cors');
+
 const Razorpay = require('razorpay');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 require('dotenv').config();
 
-app.use(cors()); // Allow all origins
+const cors = require("cors");
+
+app.use(cors({
+  origin: "https://<your-frontend-deployment>.vercel.app", // Your frontend URL
+  methods: ["GET", "POST"],
+  credentials: true
+}));
+
 app.use(express.json()); // Middleware to parse JSON data
 
 // Connect to MongoDB

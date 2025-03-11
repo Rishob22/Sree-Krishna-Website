@@ -13,12 +13,13 @@ const BookingPage = () => {
   const career = cartItems.find((item) => item.name === "Career");
   const rel = cartItems.find((item) => item.name === "Relationship");
   const slotCount = health && (career || rel) ? cartItems.length - 1 : cartItems.length;
+  const BACKEND_URL = "https://sree-krishna-website-kb2x.vercel.app";
 
   // Fetch booked slots from the backend
   useEffect(() => {
     const fetchBookedSlots = async () => {
       try {
-        const response = await fetch("http://localhost:5000/booked-slots");
+        const response = await fetch(`${BACKEND_URL}/booked-slots`);
         if (response.ok) {
           const data = await response.json();
           console.log(data);
@@ -54,10 +55,10 @@ const BookingPage = () => {
     } else if (selectedSlots.length < slotCount) {
       // Reserve slot
       try {
-        const response = await fetch("http://localhost:5000/reserve-slot", {
+        const response = await fetch(`${BACKEND_URL}/reserve-slot`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ day, slot, duration: 5 }), // Reserve for 5 minutes
+          body: JSON.stringify({ day, slot, duration: 5 }),
         });
 
         if (response.ok) {
@@ -107,11 +108,12 @@ const BookingPage = () => {
 
     try {
       // Create an order on the backend
-      const response = await fetch("http://localhost:5000/create-order", {
+      const response = await fetch(`${BACKEND_URL}/create-order`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ amount: totalPrice }),
       });
+      
 
       if (!response.ok) {
         alert("Failed to create Razorpay order. Please try again.");
@@ -131,7 +133,7 @@ const BookingPage = () => {
         handler: async function (response) {
           // Handle successful payment
           try {
-            const result = await fetch("http://localhost:5000/confirm-booking", {
+            const result = await fetch(`${BACKEND_URL}/confirm-booking`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
@@ -143,6 +145,7 @@ const BookingPage = () => {
                 phone,
               }),
             });
+            
 
             if (result.ok) {
               alert("Payment successful! Slots booked.");
@@ -151,7 +154,7 @@ const BookingPage = () => {
               setPhone("");
 
               // Refresh booked slots
-              const refreshResponse = await fetch("http://localhost:5000/booked-slots");
+              const refreshResponse = await fetch(`${BACKEND_URL}/booked-slots`);
               if (refreshResponse.ok) {
                 const data = await refreshResponse.json();
                 setBookedSlots(data);
