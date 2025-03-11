@@ -10,7 +10,7 @@ require('dotenv').config();
 const cors = require("cors");
 
 app.use(cors({
-  origin: "https://<your-frontend-deployment>.vercel.app", // Your frontend URL
+  origin: "https://sree-krishna-website.vercel.app/", // Your frontend URL
   methods: ["GET", "POST"],
   credentials: true
 }));
