@@ -148,7 +148,6 @@ const Cart = () => {
             <button
               type="button"
               onClick={() => {
-                setTotalPrice(1);
                 navigate("/booking-page");
                 setShowCart(false);
               }}

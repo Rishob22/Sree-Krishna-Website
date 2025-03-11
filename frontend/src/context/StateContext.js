@@ -70,10 +70,11 @@ const onRemove=(service)=>{
     if(health && career){
       setTotalPrice(prev=>prev-(1176+1176-1800));//(h+c+r)-(h+c)=r 
     }
-    else
+    else if(health && !career)
     {
-      setTotalPrice(prev=>prev-1176);
+      setTotalPrice(prev=>prev-624);
     }
+    else setTotalPrice(prev=>prev-1176);
   }
   else if(service.name==="Career"){
     if(health && rel){
