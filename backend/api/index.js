@@ -3,9 +3,9 @@ const cors = require('cors');
 const connectDB = require('../config/db');
 require('dotenv').config();
 
-const bookingRoutes = require('../routes/bookingRoutes');
-const itemRoutes = require('../routes/itemRoutes');
-const paymentRoutes = require('../routes/paymentRoutes');
+const bookingRoutes = require('./routes/bookingRoutes');
+const itemRoutes = require('./routes/itemRoutes');
+const paymentRoutes = require('./routes/paymentRoutes');
 
 const app = express();
 
