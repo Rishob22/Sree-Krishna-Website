@@ -10,7 +10,7 @@ require('dotenv').config();
 const cors = require("cors");
 
 app.use(cors({
-  origin: "https://sree-krishna-website.vercel.app/", // Your frontend URL
+  origin: "https://sree-krishna-website.vercel.app", // Your frontend URL
   methods: ["GET", "POST"],
   credentials: true
 }));
@@ -169,6 +169,7 @@ app.post('/confirm-booking', async (req, res) => {
 });
 
 // Start the server
-app.listen(5000, () => {
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
     console.log('Server is running on http://localhost:5000');
 });
