@@ -1,11 +1,11 @@
 const express = require('express');
 const cors = require('cors');
-const connectDB = require('./config/db');
+const connectDB = require('../config/db');
 require('dotenv').config();
 
-const bookingRoutes = require('./routes/bookingRoutes');
-const itemRoutes = require('./routes/itemRoutes');
-const paymentRoutes = require('./routes/paymentRoutes');
+const bookingRoutes = require('../routes/bookingRoutes');
+const itemRoutes = require('../routes/itemRoutes');
+const paymentRoutes = require('../routes/paymentRoutes');
 
 const app = express();
 
@@ -26,8 +26,5 @@ app.use('/api/bookings', bookingRoutes);
 app.use('/api/items', itemRoutes);
 app.use('/api/payments', paymentRoutes);
 
-// Start the server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-});
+//  Export the app for Vercel (instead of app.listen)
+module.exports = app;
