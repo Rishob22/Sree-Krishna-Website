@@ -11,7 +11,7 @@ const app = express();
 // CORS Configuration
 app.use(
   cors({
-    origin: "https://sree-krishna-website-01.vercel.app", // ❌ no trailing slash
+    origin: "https://sree-krishna-website.vercel.app", // ❌ no trailing slash
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
