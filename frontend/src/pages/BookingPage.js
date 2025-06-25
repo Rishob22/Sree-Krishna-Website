@@ -17,7 +17,7 @@ const BookingPage = () => {
   useEffect(() => {
     const fetchBookedSlots = async () => {
       try {
-        const response = await fetch("http://localhost:5000/booked-slots");
+        const response = await fetch("https://sree-krishna-website-1.onrender.com/booked-slots");
         if (response.ok) {
           const data = await response.json();
           setBookedSlots(data);
@@ -50,7 +50,7 @@ const BookingPage = () => {
       setSelectedSlots(selectedSlots.filter((item) => !(item.day === day && item.slot === slot)));
     } else if (selectedSlots.length < slotCount) {
       try {
-        const response = await fetch("http://localhost:5000/reserve-slot", {
+        const response = await fetch("https://sree-krishna-website-1.onrender.com/reserve-slot", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ day, slot, duration: 5 }),
@@ -100,7 +100,7 @@ const BookingPage = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/create-order", {
+      const response = await fetch("https://sree-krishna-website-1.onrender.com/create-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ amount: totalPrice }),
@@ -114,7 +114,7 @@ const BookingPage = () => {
       const order = await response.json();
 
       // ✅ Fetch key from backend
-      const keyRes = await fetch("http://localhost:5000/get-razorpay-key");
+      const keyRes = await fetch("https://sree-krishna-website-1.onrender.com/get-razorpay-key");
       const { key } = await keyRes.json();
 
       const options = {
@@ -126,7 +126,7 @@ const BookingPage = () => {
         order_id: order.id,
         handler: async function (response) {
           try {
-            const result = await fetch("http://localhost:5000/confirm-booking", {
+            const result = await fetch("https://sree-krishna-website-1.onrender.com/confirm-booking", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
@@ -145,7 +145,7 @@ const BookingPage = () => {
               setName("");
               setPhone("");
 
-              const refreshResponse = await fetch("http://localhost:5000/booked-slots");
+              const refreshResponse = await fetch("https://sree-krishna-website-1.onrender.com/booked-slots");
               if (refreshResponse.ok) {
                 const data = await refreshResponse.json();
                 setBookedSlots(data);
