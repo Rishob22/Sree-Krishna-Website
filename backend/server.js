@@ -4,17 +4,21 @@ const mongoose = require("mongoose");
 const Razorpay = require("razorpay");
 const cors = require("cors");
 const nodemailer = require("nodemailer");
+const crypto = require("crypto");
 
 const app = express();
+
+// CORS Configuration
 app.use(
   cors({
-    origin: "https://sree-krishna-website-01.vercel.app/",
+    origin: "https://sree-krishna-website-01.vercel.app", // ❌ no trailing slash
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
 );
 app.use(express.json());
 
+// Environment Variables
 const {
   MONGO_URL,
   PORT,
@@ -25,20 +29,20 @@ const {
   OWNER_EMAIL,
 } = process.env;
 
-// MongoDB model
+// MongoDB Connection
 mongoose.connect(MONGO_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
 
+// MongoDB Schema
 const slotSchema = new mongoose.Schema({
   day: String,
   slot: String,
 });
-
 const Slot = mongoose.model("Slot", slotSchema);
 
-// Razorpay instance
+// Razorpay Instance
 const razorpay = new Razorpay({
   key_id: RAZORPAY_KEY_ID,
   key_secret: RAZORPAY_KEY_SECRET,
@@ -47,18 +51,28 @@ const razorpay = new Razorpay({
 // Routes
 
 app.get("/booked-slots", async (req, res) => {
-  const slots = await Slot.find();
-  res.json(slots);
+  try {
+    const slots = await Slot.find();
+    res.json(slots);
+  } catch (error) {
+    console.error("Error fetching slots:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 });
 
 app.post("/reserve-slot", async (req, res) => {
-  const { day, slot, duration } = req.body;
+  const { day, slot } = req.body;
 
-  const existing = await Slot.findOne({ day, slot });
-  if (existing) return res.status(409).json({ message: "Already booked" });
+  try {
+    const existing = await Slot.findOne({ day, slot });
+    if (existing) return res.status(409).json({ message: "Already booked" });
 
-  // Dummy reserve (not DB saved, only held on frontend for X minutes)
-  res.json({ day, slot });
+    // Dummy frontend hold
+    res.json({ day, slot });
+  } catch (error) {
+    console.error("Reservation error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 });
 
 app.post("/create-order", async (req, res) => {
@@ -71,6 +85,7 @@ app.post("/create-order", async (req, res) => {
     });
     res.json(order);
   } catch (err) {
+    console.error("Razorpay order creation failed:", err);
     res.status(500).json({ error: "Razorpay order creation failed" });
   }
 });
@@ -80,9 +95,28 @@ app.get("/get-razorpay-key", (req, res) => {
 });
 
 app.post("/confirm-booking", async (req, res) => {
-  const { selectedSlots, name, phone } = req.body;
+  const {
+    selectedSlots,
+    name,
+    phone,
+    razorpay_order_id,
+    razorpay_payment_id,
+    razorpay_signature,
+  } = req.body;
 
   try {
+    // ✅ Verify Razorpay Signature
+    const body = razorpay_order_id + "|" + razorpay_payment_id;
+    const expectedSignature = crypto
+      .createHmac("sha256", RAZORPAY_KEY_SECRET)
+      .update(body.toString())
+      .digest("hex");
+
+    if (expectedSignature !== razorpay_signature) {
+      return res.status(400).json({ message: "Invalid Razorpay signature" });
+    }
+
+    // ✅ Save Slots in DB
     const promises = selectedSlots.map(({ day, slot }) =>
       Slot.findOneAndUpdate(
         { day, slot },
@@ -92,7 +126,7 @@ app.post("/confirm-booking", async (req, res) => {
     );
     await Promise.all(promises);
 
-    // Send Email
+    // ✅ Send Email Notification to OWNER only
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
@@ -113,7 +147,7 @@ app.post("/confirm-booking", async (req, res) => {
 
     await transporter.sendMail({
       from: EMAIL_ID,
-      to: [phone + "@example.com", OWNER_EMAIL],
+      to: OWNER_EMAIL,
       subject: "New Slot Booking Confirmation",
       html: message,
     });
@@ -125,6 +159,8 @@ app.post("/confirm-booking", async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+// Start Server
+const serverPort = PORT || 5000;
+app.listen(serverPort, () => {
+  console.log(`Server running on port ${serverPort}`);
 });
