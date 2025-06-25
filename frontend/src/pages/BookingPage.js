@@ -13,7 +13,7 @@ const BookingPage = () => {
   const career = cartItems.find((item) => item.name === "Career");
   const rel = cartItems.find((item) => item.name === "Relationship");
   const slotCount = health && (career || rel) ? cartItems.length - 1 : cartItems.length;
- const API_URL=process.env.PUBLIC_API_URL || "http://localhost:5000";
+ const API_URL=process.env.PUBLIC_API_URL;
   useEffect(() => {
     const fetchBookedSlots = async () => {
       try {
