@@ -12,21 +12,18 @@ const BookingPage = () => {
   const health = cartItems.find((item) => item.name === "Health");
   const career = cartItems.find((item) => item.name === "Career");
   const rel = cartItems.find((item) => item.name === "Relationship");
-  const slotCount = health && (career || rel) ? cartItems.length - 1 : cartItems.length;
- const API_URL=process.env.PUBLIC_API_URL;
+  const slotCount =
+    health && (career || rel) ? cartItems.length - 1 : cartItems.length;
+  const API_URL = "http://localhost:5000";
   useEffect(() => {
     const fetchBookedSlots = async () => {
-      try {
-        const response = await fetch(`${API_URL}/booked-slots`);
-        if (response.ok) {
-          const data = await response.json();
-          setBookedSlots(data);
-        } else {
-          console.error("Failed to fetch booked slots.");
-        }
-      } catch (error) {
-        console.error("Error fetching booked slots:", error);
+      const res = await fetch(`${API_URL}/booked-slots`);
+      if (!res) {
+        console.log("Failed to fetch data from backend");
+        res.status(500).json({ status: "failure" });
       }
+      const data = await res.json();
+      setBookedSlots(data);
     };
     fetchBookedSlots();
   }, []);
@@ -47,7 +44,11 @@ const BookingPage = () => {
       delete reservationTimers[slotKey];
       setReservationTimers({ ...reservationTimers });
 
-      setSelectedSlots(selectedSlots.filter((item) => !(item.day === day && item.slot === slot)));
+      setSelectedSlots(
+        selectedSlots.filter(
+          (item) => !(item.day === day && item.slot === slot)
+        )
+      );
     } else if (selectedSlots.length < slotCount) {
       try {
         const response = await fetch(`${API_URL}/reserve-slot`, {
@@ -62,7 +63,13 @@ const BookingPage = () => {
 
           const timer = setTimeout(() => {
             setSelectedSlots((prevSlots) =>
-              prevSlots.filter((item) => !(item.day === reservedSlot.day && item.slot === reservedSlot.slot))
+              prevSlots.filter(
+                (item) =>
+                  !(
+                    item.day === reservedSlot.day &&
+                    item.slot === reservedSlot.slot
+                  )
+              )
             );
           }, 5 * 60 * 1000);
 
@@ -89,13 +96,17 @@ const BookingPage = () => {
 
   const handlePayment = async () => {
     if (!name || !phone) {
-      alert("Please enter your name and phone number before proceeding to payment.");
+      alert(
+        "Please enter your name and phone number before proceeding to payment."
+      );
       return;
     }
 
     const scriptLoaded = await loadRazorpayScript();
     if (!scriptLoaded) {
-      alert("Razorpay SDK failed to load. Please check your internet connection.");
+      alert(
+        "Razorpay SDK failed to load. Please check your internet connection."
+      );
       return;
     }
 
@@ -296,7 +307,11 @@ const BookingPage = () => {
           });
           return (
             <React.Fragment key={index}>
-              <div style={{ ...cellStyle, fontWeight: "600", color: "#800080" }}>{day}</div>
+              <div
+                style={{ ...cellStyle, fontWeight: "600", color: "#800080" }}
+              >
+                {day}
+              </div>
               {slots.map((slot, idx) => (
                 <button
                   key={idx}
