@@ -14,10 +14,12 @@ const BookingPage = () => {
   const rel = cartItems.find((item) => item.name === "Relationship");
   const slotCount =
     health && (career || rel) ? cartItems.length - 1 : cartItems.length;
-  const API_URL = "http://localhost:5000";
+  // const API_URL =
   useEffect(() => {
     const fetchBookedSlots = async () => {
-      const res = await fetch(`${API_URL}/booked-slots`);
+      const res = await fetch(
+        `${process.env.REACT_APP_PUBLIC_API_URL}/booked-slots`
+      );
       if (!res) {
         console.log("Failed to fetch data from backend");
         res.status(500).json({ status: "failure" });
@@ -51,11 +53,14 @@ const BookingPage = () => {
       );
     } else if (selectedSlots.length < slotCount) {
       try {
-        const response = await fetch(`${API_URL}/reserve-slot`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ day, slot, duration: 5 }),
-        });
+        const response = await fetch(
+          `${process.env.REACT_APP_PUBLIC_API_URL}/reserve-slot`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ day, slot, duration: 5 }),
+          }
+        );
 
         if (response.ok) {
           const reservedSlot = await response.json();
@@ -111,11 +116,14 @@ const BookingPage = () => {
     }
 
     try {
-      const response = await fetch(`${API_URL}/create-order`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: totalPrice }),
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_PUBLIC_API_URL}/create-order`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ amount: totalPrice }),
+        }
+      );
 
       if (!response.ok) {
         alert("Failed to create Razorpay order. Please try again.");
@@ -125,7 +133,9 @@ const BookingPage = () => {
       const order = await response.json();
 
       // ✅ Fetch key from backend
-      const keyRes = await fetch(`${API_URL}/get-razorpay-key`);
+      const keyRes = await fetch(
+        `${process.env.REACT_APP_PUBLIC_API_URL}/get-razorpay-key`
+      );
       const { key } = await keyRes.json();
 
       const options = {
@@ -137,18 +147,21 @@ const BookingPage = () => {
         order_id: order.id,
         handler: async function (response) {
           try {
-            const result = await fetch(`${API_URL}/confirm-booking`, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                razorpay_order_id: response.razorpay_order_id,
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_signature: response.razorpay_signature,
-                selectedSlots,
-                name,
-                phone,
-              }),
-            });
+            const result = await fetch(
+              `${process.env.REACT_APP_PUBLIC_API_URL}/confirm-booking`,
+              {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  razorpay_order_id: response.razorpay_order_id,
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_signature: response.razorpay_signature,
+                  selectedSlots,
+                  name,
+                  phone,
+                }),
+              }
+            );
 
             if (result.ok) {
               alert("Payment successful! Slots booked.");
@@ -156,7 +169,9 @@ const BookingPage = () => {
               setName("");
               setPhone("");
 
-              const refreshResponse = await fetch(`${API_URL}/booked-slots`);
+              const refreshResponse = await fetch(
+                `${process.env.REACT_APP_PUBLIC_API_URL}/booked-slots`
+              );
               if (refreshResponse.ok) {
                 const data = await refreshResponse.json();
                 setBookedSlots(data);
