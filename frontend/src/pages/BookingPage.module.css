@@ -1,0 +1,93 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px 20px;
+  background: linear-gradient(135deg, #ffc0cb, #800080);
+  color: #fff;
+  font-family: 'Arial', sans-serif;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.heading {
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 30px;
+  text-align: center;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  width: 100%;
+  max-width: 700px;
+  background-color: #fff;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.cell {
+  padding: 15px 10px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 500;
+  background: #f8f8f8;
+  border-radius: 8px;
+  color: #555;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.cellHeader {
+  font-weight: bold;
+  background-color: #800080;
+  color: #fff;
+}
+
+.dayLabel {
+  font-weight: 600;
+  color: #800080;
+}
+
+.slotAvailable {
+  background-color: #ffc0cb;
+  color: #800080;
+  cursor: pointer;
+}
+
+.slotSelected {
+  background-color: #800080;
+  color: #ffc0cb;
+  cursor: pointer;
+}
+
+.slotBooked {
+  background-color: #d3d3d3;
+  color: #808080;
+  cursor: not-allowed;
+}
+
+.inputWrapper {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.input {
+  margin: 0 10px 10px 0;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #800080;
+}
+
+.payButton {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #800080;
+  color: #ffc0cb;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}

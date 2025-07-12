@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import styles from "./BookingPage.module.css";
 import { useStateContext } from "../context/StateContext";
 
 const BookingPage = () => {
@@ -14,7 +15,7 @@ const BookingPage = () => {
   const rel = cartItems.find((item) => item.name === "Relationship");
   const slotCount =
     health && (career || rel) ? cartItems.length - 1 : cartItems.length;
-  // const API_URL =
+
   useEffect(() => {
     const fetchBookedSlots = async () => {
       const res = await fetch(
@@ -22,7 +23,7 @@ const BookingPage = () => {
       );
       if (!res) {
         console.log("Failed to fetch data from backend");
-        res.status(500).json({ status: "failure" });
+        return;
       }
       const data = await res.json();
       setBookedSlots(data);
@@ -131,15 +132,13 @@ const BookingPage = () => {
       }
 
       const order = await response.json();
-
-      // ✅ Fetch key from backend
       const keyRes = await fetch(
         `${process.env.REACT_APP_PUBLIC_API_URL}/get-razorpay-key`
       );
       const { key } = await keyRes.json();
 
       const options = {
-        key, // ✅ Using fetched key
+        key,
         amount: order.amount,
         currency: order.currency,
         name: "Slot Booking",
@@ -210,106 +209,26 @@ const BookingPage = () => {
 
   const slots = ["3:00pm - 5:00pm", "5:00pm - 7:00pm", "7:00pm - 9:00pm"];
 
-  const containerStyle = {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    padding: "30px 20px",
-    background: "linear-gradient(135deg, #FFC0CB, #800080)",
-    color: "#fff",
-    fontFamily: "'Arial', sans-serif",
-    minHeight: "100vh",
-    boxSizing: "border-box",
-  };
-
-  const gridStyle = {
-    display: "grid",
-    gridTemplateColumns: "repeat(4, 1fr)",
-    gap: "12px",
-    width: "100%",
-    maxWidth: "700px",
-    backgroundColor: "#fff",
-    borderRadius: "20px",
-    padding: "20px",
-    boxShadow: "0 8px 20px rgba(0, 0, 0, 0.15)",
-  };
-
-  const cellStyle = {
-    padding: "15px 10px",
-    textAlign: "center",
-    fontSize: "16px",
-    color: "#555",
-    fontWeight: "500",
-    background: "#f8f8f8",
-    borderRadius: "8px",
-    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-  };
-
-  const headingStyle = {
-    fontSize: "32px",
-    fontWeight: "bold",
-    marginBottom: "30px",
-    textAlign: "center",
-    textShadow: "0 2px 4px rgba(0, 0, 0, 0.3)",
-  };
-
-  const slotButtonStyle = (day, slot) => {
-    if (isSlotBooked(day, slot)) {
-      return {
-        ...cellStyle,
-        backgroundColor: "#d3d3d3",
-        color: "#808080",
-        cursor: "not-allowed",
-      };
-    }
-
-    if (isSlotSelected(day, slot)) {
-      return {
-        ...cellStyle,
-        backgroundColor: "#800080",
-        color: "#FFC0CB",
-      };
-    }
-
-    return {
-      ...cellStyle,
-      backgroundColor: "#FFC0CB",
-      color: "#800080",
-      cursor: "pointer",
-    };
+  const getSlotClass = (day, slot) => {
+    if (isSlotBooked(day, slot)) return styles.slotBooked;
+    if (isSlotSelected(day, slot)) return styles.slotSelected;
+    return styles.slotAvailable;
   };
 
   return (
-    <div style={containerStyle}>
-      <h2 style={headingStyle}>Book Your Slots</h2>
-      <h3 style={headingStyle}>
+    <div className={styles.container}>
+      <h2 className={styles.heading}>Book Your Slots</h2>
+      <h3 className={styles.heading}>
         You need to book any {slotCount} slot(s) for:
       </h3>
       {cartItems.map((item) => (
         <h3 key={item.name}>{item.name}</h3>
       ))}
-      <br />
-      <div style={gridStyle}>
-        <div
-          style={{
-            ...cellStyle,
-            fontWeight: "bold",
-            backgroundColor: "#800080",
-            color: "#fff",
-          }}
-        >
-          Day/Time
-        </div>
+
+      <div className={styles.grid}>
+        <div className={`${styles.cell} ${styles.cellHeader}`}>Day/Time</div>
         {slots.map((slot, index) => (
-          <div
-            key={index}
-            style={{
-              ...cellStyle,
-              fontWeight: "bold",
-              backgroundColor: "#800080",
-              color: "#fff",
-            }}
-          >
+          <div key={index} className={`${styles.cell} ${styles.cellHeader}`}>
             {slot}
           </div>
         ))}
@@ -320,17 +239,14 @@ const BookingPage = () => {
             month: "short",
             day: "numeric",
           });
+
           return (
             <React.Fragment key={index}>
-              <div
-                style={{ ...cellStyle, fontWeight: "600", color: "#800080" }}
-              >
-                {day}
-              </div>
+              <div className={`${styles.cell} ${styles.dayLabel}`}>{day}</div>
               {slots.map((slot, idx) => (
                 <button
                   key={idx}
-                  style={slotButtonStyle(day, slot)}
+                  className={`${styles.cell} ${getSlotClass(day, slot)}`}
                   onClick={() => handleSlotClick(day, slot)}
                 >
                   {isSlotBooked(day, slot)
@@ -344,45 +260,25 @@ const BookingPage = () => {
           );
         })}
       </div>
-      <br />
 
-      <div style={{ marginBottom: "20px", textAlign: "center" }}>
+      <div className={styles.inputWrapper}>
         <input
           type="text"
           placeholder="Enter your name"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          style={{
-            marginRight: "10px",
-            padding: "10px",
-            borderRadius: "5px",
-            border: "1px solid #800080",
-          }}
+          className={styles.input}
         />
         <input
           type="text"
           placeholder="Enter your phone"
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
-          style={{
-            padding: "10px",
-            borderRadius: "5px",
-            border: "1px solid #800080",
-          }}
+          className={styles.input}
         />
       </div>
 
-      <button
-        onClick={handlePayment}
-        style={{
-          padding: "10px 20px",
-          fontSize: "16px",
-          backgroundColor: "#800080",
-          color: "#FFC0CB",
-          border: "none",
-          borderRadius: "5px",
-        }}
-      >
+      <button onClick={handlePayment} className={styles.payButton}>
         Proceed to Payment
       </button>
 
