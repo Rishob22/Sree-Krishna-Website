@@ -35,6 +35,7 @@ const LoginPage = () => {
         toast.success(data.message || "Login successful");
         //setUser(data.user); // Optional: update context
         navigate("/"); // Navigate after login
+        window.location.reload();
       } else {
         toast.error(data.message || "Email or password incorrect");
       }

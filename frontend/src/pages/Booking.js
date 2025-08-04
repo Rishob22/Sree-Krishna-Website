@@ -19,7 +19,7 @@ import { useStateContext } from "../context/StateContext";
 import "./Booking.css";
 import { useState, useEffect } from "react";
 const Booking = () => {
-  const { cartItems, totalPrice, slotCount } = useStateContext();
+  const { cartItems, totalPrice, slotCount, user } = useStateContext();
   const isLoggedIn = false;
   const razorpayKey = process.env.REACT_APP_RAZORPAY_KEY_ID;
   const timeSlots = ["3pm-5pm", "5pm-7pm", "7pm-9pm"];
@@ -201,57 +201,8 @@ const Booking = () => {
             ))}
           </tbody>
         </table>
-        {!isLoggedIn && (
-          <div className="container mt-4 p-3 border rounded shadow-sm bg-light">
-            <h5 className="mb-3">Enter Your Details to Proceed</h5>
-            <form onSubmit={handleFormSubmit}>
-              <div className="mb-2">
-                <label htmlFor="name" className="form-label">
-                  Name
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  name="name"
-                  placeholder="Enter your name"
-                  value={formData.name}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="mb-2">
-                <label htmlFor="email" className="form-label">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  className="form-control"
-                  name="email"
-                  placeholder="Enter your email"
-                  value={formData.email}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="mb-3">
-                <label htmlFor="password" className="form-label">
-                  Password
-                </label>
-                <input
-                  type="password"
-                  className="form-control"
-                  id="password"
-                  placeholder="Password"
-                  required
-                />
-              </div>
-              <div className="container mb-4 d-flex justify-content-center">
-                <button type="submit" className="btn btn-primary">
-                  Proceed
-                </button>
-              </div>
-            </form>
-          </div>
-        )}
-        {isLoggedIn && (
+
+        {user && (
           <div className="container mb-4 d-flex justify-content-center">
             <button type="button" className="btn btn-primary">
               Proceed
