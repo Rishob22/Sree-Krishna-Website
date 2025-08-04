@@ -105,17 +105,17 @@ const Footer = () => {
           <div style={{ display: "flex", gap: "12px" }}>
             {[
               {
-                href: "https://dummy.fb.link",
+                href: "https://www.facebook.com/DivineTarotMediumHealerMeghna/",
                 src: "/facebook.webp",
                 alt: "Facebook",
               },
               {
-                href: "https://dummy.insta.link",
+                href: "https://www.instagram.com/divinetarotmediumhealermeghna/",
                 src: "/images.jpeg",
                 alt: "Instagram",
               },
               {
-                href: "https://dummy.whatsapp.link",
+                href: "https://wa.me/message/MGKFJRGNVIJFF1",
                 src: "/WhatsApp.webp",
                 alt: "WhatsApp",
               },
@@ -167,7 +167,8 @@ const Footer = () => {
           ...arialFont,
         }}
       >
-        © {new Date().getFullYear()} Your Company. All rights reserved.
+        © {new Date().getFullYear()} Sree Krishna Enlightened Tarot Healing and
+        Reading. All rights reserved.
       </div>
     </footer>
   );
