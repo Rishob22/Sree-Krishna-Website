@@ -23,7 +23,8 @@ const Booking = () => {
   const isLoggedIn = false;
   const razorpayKey = process.env.REACT_APP_RAZORPAY_KEY_ID;
   const timeSlots = ["3pm-5pm", "5pm-7pm", "7pm-9pm"];
-  const notify = () => toast("Here is your toast.");
+  const notifyOverSelection = () =>
+    toast.error(`You can only select ${slotCount} slots`);
   const [selectedSlots, setSelectedSlots] = useState([]);
   const [bookedSlots, setBookedSlots] = useState([]);
   const [formData, setFormData] = useState({});
@@ -64,7 +65,7 @@ const Booking = () => {
     const alreadySelected = selectedSlots.includes(key);
 
     if (selectedSlots.length === slotCount && !alreadySelected) {
-      notify();
+      notifyOverSelection();
       return;
     }
 
