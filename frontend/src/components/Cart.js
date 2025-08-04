@@ -13,6 +13,7 @@ const Cart = () => {
     cartItems,
     setShowCart,
     onRemove,
+    user,
   } = useStateContext(); // destructuring these values from useStateContext
   const navigate = useNavigate();
 
@@ -102,7 +103,7 @@ const Cart = () => {
                 }}
               >
                 <img
-                  src={`/tarot_assets/converted/${item.name}.jpg`}
+                  src={/tarot_assets/converted/${item.name}.jpg}
                   alt={item.name}
                   style={{
                     width: "80px",
@@ -112,7 +113,9 @@ const Cart = () => {
                   }}
                 />
                 <div style={{ marginLeft: "10px", flex: 1 }}>
-                  <div style={{ display: "flex", justifyContent: "space-between" }}>
+                  <div
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                  >
                     <h5>{item.name}</h5>
                     <h4>Rs.{item.price}</h4>
                   </div>
@@ -145,25 +148,53 @@ const Cart = () => {
               <h3>Subtotal:</h3>
               <h3>Rs.{totalPrice}</h3>
             </div>
-            <button
-              type="button"
-              onClick={() => {
-                navigate("/booking-page");
-                setShowCart(false);
-              }}
-              style={{
-                width: "100%",
-                padding: "10px",
-                backgroundColor: "#007bff",
-                color: "#fff",
-                border: "none",
-                borderRadius: "4px",
-                cursor: "pointer",
-                fontSize: "16px",
-              }}
-            >
-              Proceed to Book Slot Timings
-            </button>
+
+            {!user && (
+              <div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    navigate("/login");
+                    setShowCart(false);
+                  }}
+                  style={{
+                    width: "100%",
+                    padding: "10px",
+                    backgroundColor: "#007bff",
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: "4px",
+                    cursor: "pointer",
+                    fontSize: "16px",
+                  }}
+                >
+                  Login to Proceed
+                </button>
+              </div>
+            )}
+            {user && (
+              <div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    navigate("/booking-page");
+                    setShowCart(false);
+                  }}
+                  style={{
+                    width: "100%",
+                    padding: "10px",
+                    backgroundColor: "#007bff",
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: "4px",
+                    cursor: "pointer",
+                    fontSize: "16px",
+                  }}
+                >
+                  Proceed to Book Slot Timings
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>

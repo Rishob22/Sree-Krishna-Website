@@ -1,0 +1,20 @@
+.bookable-cell {
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.bookable-cell:hover {
+  background-color: #ffc107; /* Bootstrap warning color */
+  color: #000;
+  font-weight: bold;
+}
+.bookable-cell.selected {
+  background-color: #0d6efd; /* Bootstrap primary blue */
+  color: white;
+  font-weight: bold;
+}
+.bookable-cell.booked {
+  background-color: grey; /* Bootstrap primary blue */
+  color: white;
+  font-weight: bold;
+}
