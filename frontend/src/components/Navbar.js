@@ -33,11 +33,16 @@ const Navbar = () => {
   };
 
   const handleLogout = async () => {
+    const confirmLogout = window.confirm("Are you sure you want to log out?");
+    if (!confirmLogout) return;
     try {
       await fetch(`${process.env.REACT_APP_API_BASE_URL}/user/logout`, {
         method: "POST",
         credentials: "include",
       });
+      // Attempt to delete client-side cookie (for good measure)
+      document.cookie =
+        "signedin_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
       setUser(null);
       navigate("/login");
     } catch (error) {
