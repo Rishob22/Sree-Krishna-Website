@@ -13,12 +13,7 @@ const allowedOrigins = [
   "http://localhost:3000",
   "https://sree-krishna-website.vercel.app",
 ];
-app.use(
-  cors({
-    origin: allowedOrigins,
-    credentials: true,
-  })
-);
+app.use(cors());
 mongoose
   .connect(process.env.MONGO_URL)
   .then(() => console.log("MongoDb connected"))
@@ -35,7 +30,8 @@ const slotRoute = require("./routes/slot.js");
 app.use("/user", userRoute);
 app.use("/payment", paymentRoute);
 app.use("/slot", slotRoute);
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+app.get("/", (req, res) => res.send("Backend is up and running"));
+const port = process.env.PORT || 5000;
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
 });
