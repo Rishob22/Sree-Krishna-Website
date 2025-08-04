@@ -12,13 +12,16 @@ const SignupPage = () => {
   const handleSignupSubmit = async (e) => {
     e.preventDefault();
     const formData = { name, email, password };
-    const res = await fetch("http://localhost:5000/user/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
+    const res = await fetch(
+      `${process.env.REACT_APP_API_BASE_URL}/user/signup`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      }
+    );
 
     if (res.ok) {
       toast.success("Signed up successfully.Please log in now");

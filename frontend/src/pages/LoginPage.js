@@ -16,14 +16,17 @@ const LoginPage = () => {
     console.log("Login button clicked");
 
     try {
-      const res = await fetch("http://localhost:5000/user/signin", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include", // Important to receive cookies
-        body: JSON.stringify({ email, password }),
-      });
+      const res = await fetch(
+        `${process.env.REACT_APP_API_BASE_URL}/user/signin`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include", // Important to receive cookies
+          body: JSON.stringify({ email, password }),
+        }
+      );
 
       const data = await res.json();
       console.log("Login response:", data);

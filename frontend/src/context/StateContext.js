@@ -74,9 +74,12 @@ export const StateContext = ({ children }) => {
   useEffect(() => {
     const getUser = async () => {
       try {
-        const res = await fetch("http://localhost:5000/user/me", {
-          credentials: "include",
-        });
+        const res = await fetch(
+          `${process.env.REACT_APP_API_BASE_URL}/user/me`,
+          {
+            credentials: "include",
+          }
+        );
         const data = await res.json();
         if (res.ok && data.user) {
           setUser(data.user);

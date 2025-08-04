@@ -79,17 +79,20 @@ const Booking = () => {
       toast.success("Select service(s) before payment");
       return;
     }
-    const response = await fetch("http://localhost:5000/create-order", {
-      method: "POST", //we send the following to the server along wit the request
-      body: JSON.stringify({
-        amount: totalPrice * 100,
-        currency: "INR",
-        receipt: "mondalrishob@gmail.com",
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      `${process.env.REACT_APP_API_BASE_URL}/payment/create-order`,
+      {
+        method: "POST", //we send the following to the server along wit the request
+        body: JSON.stringify({
+          amount: totalPrice * 100,
+          currency: "INR",
+          receipt: "mondalrishob@gmail.com",
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     //The response generated from here is the final boss
     const order = await response.json();
 
@@ -102,17 +105,20 @@ const Booking = () => {
       image: "https://example.com/your_logo",
       order_id: order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
       handler: async function (response) {
-        const verifyRes = await fetch("http://localhost:5000/verify-payment", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            razorpay_order_id: response.razorpay_order_id,
-            razorpay_payment_id: response.razorpay_payment_id,
-            razorpay_signature: response.razorpay_signature,
-          }),
-        });
+        const verifyRes = await fetch(
+          `${process.env.REACT_APP_API_BASE_URL}/payment/verify-payment`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+            }),
+          }
+        );
 
         const verifyData = await verifyRes.json();
         if (verifyData.status === "success") {
