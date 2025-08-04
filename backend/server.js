@@ -8,6 +8,7 @@ const cookieParser = require("cookie-parser");
 const allowedOrigins = [
   "http://localhost:3000",
   "https://sree-krishna-website.vercel.app",
+  "https://sree-krishna-website-kotxhmfez-rishob-mondals-projects.vercel.app",
 ];
 
 app.use(
