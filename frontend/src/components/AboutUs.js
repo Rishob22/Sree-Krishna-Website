@@ -16,8 +16,8 @@ const AboutUs = () => {
     color: "#333",
     borderRadius: "20px",
     boxShadow: "0 8px 20px rgba(0, 0, 0, 0.2)",
-    padding: "40px",
-    maxWidth: "700px",
+    padding: "60px 30px",
+    maxWidth: "900px",
     width: "100%",
     textAlign: "center",
   };
@@ -25,9 +25,9 @@ const AboutUs = () => {
   const imageContainerStyle = {
     borderRadius: "50%",
     overflow: "hidden",
-    width: "120px",
-    height: "120px",
-    margin: "0 auto 20px auto", // Center the image
+    width: "clamp(180px, 40vw, 250px)", // responsive size based on screen width
+    height: "clamp(180px, 40vw, 250px)",
+    margin: "0 auto 30px auto",
     boxShadow: "0 4px 15px rgba(0, 0, 0, 0.2)",
   };
 
@@ -38,25 +38,25 @@ const AboutUs = () => {
   };
 
   const headingStyle = {
-    fontSize: "28px",
+    fontSize: "36px",
     fontWeight: "bold",
     color: "#800080",
-    marginBottom: "20px",
+    marginBottom: "24px",
     textTransform: "uppercase",
-    letterSpacing: "1.2px",
+    letterSpacing: "1.5px",
   };
 
   const descriptionStyle = {
-    fontSize: "16px",
-    lineHeight: "1.8",
+    fontSize: "20px",
+    lineHeight: "2",
     color: "#555",
     margin: "0 auto",
-    maxWidth: "600px",
+    maxWidth: "700px",
   };
 
   const dividerStyle = {
-    width: "50px",
-    height: "4px",
+    width: "60px",
+    height: "5px",
     backgroundColor: "#800080",
     margin: "20px auto",
     borderRadius: "4px",
@@ -66,20 +66,20 @@ const AboutUs = () => {
     <div id="aboutus" style={containerStyle}>
       <div style={cardStyle}>
         <div style={imageContainerStyle}>
-          <img
-            src="https://via.placeholder.com/150" // Replace with the founder's image URL
-            alt="Founder"
-            style={imageStyle}
-          />
+          <img src="/AboutUs.jpg" alt="Founder" style={imageStyle} />
         </div>
         <h2 style={headingStyle}>About Us</h2>
         <div style={dividerStyle}></div>
         <p style={descriptionStyle}>
-          Welcome to our platform! Founded with a passion for excellence and a
-          commitment to quality, we aim to bring the best to our customers. Our
-          team, led by a visionary founder, works tirelessly to innovate and
-          create a remarkable experience. Join us as we continue to grow and make
-          a difference in the world!
+          Based out of Kolkata, India, Sree Krishna Tarot Reading and Healing
+          Services provides the best-in-class services for sustenance of mental
+          and spiritual health. Its founder, Ms. Meghna Mondal, has years of
+          experience being a Reiki healer. A seasoned Tarot Card Reader and
+          social worker, she specializes in empathetic and Reiki-assisted
+          healing whilst ensuring world-class professionalism and
+          confidentiality. In the rush of the world, embark on your journey to
+          structure your spiritual self with Meghna and conquer any challenge
+          life throws at you!
         </p>
       </div>
     </div>
