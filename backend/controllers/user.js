@@ -12,10 +12,16 @@ async function handleSigninPost(req, res) {
 
     const token = await createTokenForUser(user); // uses your clean JWT service
 
-    res.status(201).cookie("signedin_token", token).json({
-      success: true,
-      message: "Login successful",
-    });
+    res
+      .status(201)
+      .cookie("signedin_token", token, {
+        secure: true,
+        sameSite: "None",
+      })
+      .json({
+        success: true,
+        message: "Login successful",
+      });
   } else {
     res
       .status(401)
