@@ -1,20 +1,122 @@
-.bookable-cell {
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+/* Booking — purple/rose theme, premium but minimal; keeps Bootstrap table */
+
+.booking-root {
+  --violet-700: #6d28d9;
+  --violet-600: #7c3aed;
+  --violet-100: #ede9fe;
+  --rose-500: #f43f5e;
+
+  --chip-bg: rgba(139, 92, 246, 0.08);
+  --chip-border: rgba(139, 92, 246, 0.22);
+  --chip-text: var(--violet-700);
 }
 
-.bookable-cell:hover {
-  background-color: #ffc107; /* Bootstrap warning color */
-  color: #000;
-  font-weight: bold;
+.booking-title {
+  font-family: 'Cinzel Decorative', serif;
+  font-weight: 700;
+  color: var(--violet-700);
+  margin-top: 10px;
 }
+
+.booking-legend {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.legend-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 12px;
+  border: 1px solid var(--chip-border);
+  background: var(--chip-bg);
+  color: var(--chip-text);
+}
+.legend-chip.selected {
+  background: var(--violet-600);
+  color: #fff;
+  border-color: var(--violet-600);
+}
+.legend-chip.booked {
+  background: var(--violet-100);
+  color: var(--violet-700);
+  border-color: rgba(109, 40, 217, 0.25);
+}
+.legend-chip.free {
+  background: rgba(16, 185, 129, 0.10);
+  color: #0f5132;
+  border-color: rgba(16, 185, 129, 0.25);
+}
+
+/* Table polish */
+/* Softer column headings */
+.booking-table thead.table-dark th {
+  background: linear-gradient(
+    90deg,
+    rgba(124, 58, 237, 0.12),  /* violet, light */
+    rgba(244, 63, 94, 0.10)    /* rose, very light */
+  );
+  color: #374151; /* slate-700 for better readability on light bg */
+  border-color: rgba(124, 58, 237, 0.15);
+  font-weight: 600;
+}
+
+.date-cell {
+  font-weight: 600;
+  color: #334155;
+  background: #f8fafc;
+}
+
+/* Clickable cells */
+.bookable-cell {
+  cursor: pointer;
+  transition: background-color 0.25s ease, color 0.2s ease, box-shadow 0.2s ease;
+  user-select: none;
+}
+
+/* Hover (only when available) */
+.bookable-cell:not(.booked):hover {
+  background-color: rgba(139, 92, 246, 0.12);
+  color: #1f2937;
+  font-weight: 700;
+  box-shadow: inset 0 0 0 1px rgba(139, 92, 246, 0.2);
+}
+
+/* Selected */
 .bookable-cell.selected {
-  background-color: #0d6efd; /* Bootstrap primary blue */
-  color: white;
-  font-weight: bold;
+  background-color: var(--violet-600); /* primary violet */
+  color: #fff;
+  font-weight: 700;
 }
+
+/* Booked/Pending — non-clickable */
 .bookable-cell.booked {
-  background-color: grey; /* Bootstrap primary blue */
-  color: white;
-  font-weight: bold;
+  background-color: var(--violet-100);
+  color: var(--violet-700);
+  font-weight: 700;
+  cursor: not-allowed;
+  pointer-events: none; /* <- prevents clicks */
+  opacity: 0.9;
+}
+
+/* Proceed button tint */
+.booking-proceed {
+  background-color: var(--violet-600);
+  border-color: var(--violet-600);
+}
+.booking-proceed:hover {
+  background-color: #6a21d8;
+  border-color: #6a21d8;
+}
+.booking-proceed:disabled {
+  background-color: #c7b8fb;
+  border-color: #c7b8fb;
+  cursor: not-allowed;
 }

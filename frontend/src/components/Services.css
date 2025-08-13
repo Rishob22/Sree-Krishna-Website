@@ -1,0 +1,65 @@
+/* Services — premium purple/rose layout, uses App.css tokens */
+
+.services-section {
+  padding: clamp(16px, 4vw, 28px) 16px;
+  scroll-margin-top: 90px; /* so sticky navbar doesn’t cover the anchor */
+  max-width: 1200px;
+  margin: 0 auto;
+  /* gentle background aura */
+  background:
+    radial-gradient(900px 420px at -10% -10%, rgba(139, 92, 246, 0.06), transparent 60%),
+    radial-gradient(900px 420px at 110% -10%, rgba(244, 63, 94, 0.05), transparent 60%);
+}
+
+.services-group {
+  margin-top: clamp(12px, 3vw, 28px);
+}
+
+.services-heading {
+  font-family: 'Cinzel Decorative', serif;
+  text-align: center;
+  color: var(--violet-700);
+  font-size: clamp(24px, 4.2vw, 34px);
+  font-weight: 700;
+  letter-spacing: .3px;
+  position: relative;
+  display: inline-block;
+  margin: 8px auto 18px;
+  width: 100%;
+}
+.heading-underline {
+  display: block;
+  width: 86px;
+  height: 4px;
+  margin: 10px auto 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--violet-600), var(--rose-500));
+  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.22);
+}
+
+.services-grid {
+  display: grid;
+  gap: clamp(12px, 2.8vw, 18px);
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  align-items: stretch;
+}
+
+/* Empty placeholders */
+.services-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 18px 14px;
+  color: var(--slate-600);
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  background: rgba(139, 92, 246, 0.06);
+  border: 1px solid rgba(139, 92, 246, 0.14);
+  border-radius: 14px;
+}
+
+/* Small screens */
+@media (max-width: 380px) {
+  .services-grid {
+    grid-template-columns: 1fr;
+  }
+}

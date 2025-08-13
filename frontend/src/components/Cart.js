@@ -1,200 +1,142 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineLeft, AiOutlineShopping } from "react-icons/ai";
 import { TiDeleteOutline } from "react-icons/ti";
 import { useStateContext } from "../context/StateContext";
+import "./Cart.css";
 
 const Cart = () => {
-  const cartRef = useRef();
+  const cartRef = useRef(null);
   const {
     totalPrice,
-    setTotalPrice,
     totalQuantities,
     cartItems,
     setShowCart,
     onRemove,
-    user
-  } = useStateContext(); // destructuring these values from useStateContext
+    user,
+  } = useStateContext();
   const navigate = useNavigate();
+
+  // Close on ESC
+  useEffect(() => {
+    const onKey = (e) => e.key === "Escape" && setShowCart(false);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [setShowCart]);
+
+  // Close when clicking the backdrop (not the drawer)
+  const handleBackdropClick = (e) => {
+    if (e.target === e.currentTarget) setShowCart(false);
+  };
 
   return (
     <div
       ref={cartRef}
-      style={{
-        position: "fixed",
-        top: 0,
-        right: 0,
-        width: "100%",
-        height: "100%",
-        backgroundColor: "rgba(0, 0, 0, 0.5)",
-        zIndex: 1000,
-        overflowY: "auto",
-      }}
+      className="cart-overlay"
+      onClick={handleBackdropClick}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Shopping cart"
     >
-      <div
-        style={{
-          width: "90%",
-          maxWidth: "400px",
-          margin: "0 auto",
-          backgroundColor: "#fff",
-          borderRadius: "8px",
-          padding: "20px",
-          position: "relative",
-          top: "10%",
-        }}
-      >
+      <aside className="cart-drawer">
+        {/* Header */}
         <button
           type="button"
+          className="cart-back"
           onClick={() => setShowCart(false)}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "10px",
-            marginBottom: "20px",
-            background: "none",
-            border: "none",
-            fontSize: "16px",
-            cursor: "pointer",
-          }}
         >
-          <AiOutlineLeft />
-          <span>Your Cart</span>
-          <span>({totalQuantities} items)</span>
+          <AiOutlineLeft size={20} />
+          <span className="cart-title">Your Cart</span>
+          <span className="cart-count" aria-label={`${totalQuantities} items`}>
+            {totalQuantities}
+          </span>
         </button>
+
+        {/* Empty state */}
         {cartItems.length < 1 && (
-          <div
-            style={{
-              textAlign: "center",
-              padding: "20px",
-            }}
-          >
-            <AiOutlineShopping size={100} />
-            <h3>Your Cart is Empty</h3>
-            <Link to="/">
+          <div className="cart-empty">
+            <AiOutlineShopping size={80} className="cart-empty-icon" />
+            <h3>No items yet</h3>
+            <p className="muted">Explore services to add them here.</p>
+            <Link to="/" className="w-100">
               <button
                 type="button"
+                className="btn-brand w-100 mt-2"
                 onClick={() => setShowCart(false)}
-                style={{
-                  padding: "10px 20px",
-                  backgroundColor: "#007bff",
-                  color: "#fff",
-                  border: "none",
-                  borderRadius: "4px",
-                  cursor: "pointer",
-                  marginTop: "10px",
-                }}
               >
                 Keep exploring
               </button>
             </Link>
           </div>
         )}
-        <div>
-          {cartItems.length >= 1 &&
-            cartItems.map((item, index) => (
-              <div
-                key={item.id}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  marginBottom: "15px",
-                  borderBottom: "1px solid #ccc",
-                  paddingBottom: "10px",
+
+        {/* Items */}
+        {cartItems.length >= 1 && (
+          <div className="cart-list">
+            {cartItems.map((item, index) => {
+              const key = item._id || item.id || `${item.name}-${index}`;
+              return (
+                <div key={key} className="cart-item">
+                  <img
+                    className="cart-item-image"
+                    src={`/tarot_assets/converted/${item.name}.jpg`}
+                    alt={item.name}
+                  />
+                  <div className="cart-item-info">
+                    <div className="cart-item-row">
+                      <h5 className="cart-item-name">{item.name}</h5>
+                      <h4 className="cart-item-price">₹ {item.price}</h4>
+                    </div>
+                    <button
+                      type="button"
+                      className="cart-remove"
+                      onClick={() => onRemove(item)}
+                      aria-label={`Remove ${item.name}`}
+                      title="Remove"
+                    >
+                      <TiDeleteOutline size={22} />
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {/* Footer */}
+        {cartItems.length >= 1 && (
+          <div className="cart-footer">
+            <div className="cart-subtotal">
+              <span>Subtotal</span>
+              <strong>₹ {totalPrice}</strong>
+            </div>
+
+            {!user ? (
+              <button
+                type="button"
+                className="btn-brand w-100"
+                onClick={() => {
+                  navigate("/login");
+                  setShowCart(false);
                 }}
               >
-                <img
-                  src={`/tarot_assets/converted/${item.name}.jpg`}
-                  alt={item.name}
-                  style={{
-                    width: "80px",
-                    height: "80px",
-                    objectFit: "cover",
-                    borderRadius: "8px",
-                  }}
-                />
-                <div style={{ marginLeft: "10px", flex: 1 }}>
-                  <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <h5>{item.name}</h5>
-                    <h4>Rs.{item.price}</h4>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => onRemove(item)}
-                    style={{
-                      background: "none",
-                      border: "none",
-                      color: "red",
-                      cursor: "pointer",
-                      fontSize: "16px",
-                    }}
-                  >
-                    <TiDeleteOutline />
-                  </button>
-                </div>
-              </div>
-            ))}
-        </div>
-        {cartItems.length >= 1 && (
-          <div style={{ marginTop: "20px" }}>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                marginBottom: "20px",
-              }}
-            >
-              <h3>Subtotal:</h3>
-              <h3>Rs.{totalPrice}</h3>
-            </div>
-           {!user && (
-              <div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    navigate("/login");
-                    setShowCart(false);
-                  }}
-                  style={{
-                    width: "100%",
-                    padding: "10px",
-                    backgroundColor: "#007bff",
-                    color: "#fff",
-                    border: "none",
-                    borderRadius: "4px",
-                    cursor: "pointer",
-                    fontSize: "16px",
-                  }}
-                >
-                  Login to Proceed
-                </button>
-              </div>
-            )}
-            {user && (
-              <div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    navigate("/booking-page");
-                    setShowCart(false);
-                  }}
-                  style={{
-                    width: "100%",
-                    padding: "10px",
-                    backgroundColor: "#007bff",
-                    color: "#fff",
-                    border: "none",
-                    borderRadius: "4px",
-                    cursor: "pointer",
-                    fontSize: "16px",
-                  }}
-                >
-                  Proceed to Book Slot Timings
-                </button>
-              </div>
+                Login to Proceed
+              </button>
+            ) : (
+              <button
+                type="button"
+                className="btn-brand w-100"
+                onClick={() => {
+                  navigate("/booking-page");
+                  setShowCart(false);
+                }}
+              >
+                Proceed to Book Slot Timings
+              </button>
             )}
           </div>
         )}
-      </div>
+      </aside>
     </div>
   );
 };

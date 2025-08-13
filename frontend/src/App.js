@@ -12,6 +12,7 @@ import ContactUs from "./pages/ContactUs";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import Success from "./pages/Success";
+import ProfileBookingsPage from "./pages/ProfileBookingsPage";
 import { useEffect } from "react";
 const App = () => {
   //app returns the structure
@@ -29,6 +30,7 @@ const App = () => {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/success" element={<Success />} />
+          <Route path="/profile" element={<ProfileBookingsPage />} />
         </Routes>
         <Footer />
       </StateContext>

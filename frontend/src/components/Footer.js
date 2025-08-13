@@ -1,174 +1,80 @@
 import React from "react";
 import Logo from "../assets/images/Logo.png";
+import "./Footer.css";
 
 const Footer = () => {
-  const arialFont = { fontFamily: "'Arial', sans-serif" };
+  const year = new Date().getFullYear();
+
+  const socials = [
+    {
+      href: "https://www.facebook.com/DivineTarotMediumHealerMeghna/",
+      src: "/facebook.webp",
+      alt: "Facebook",
+      label: "Visit us on Facebook",
+    },
+    {
+      href: "https://www.instagram.com/divinetarotmediumhealermeghna/",
+      src: "/images.jpeg",
+      alt: "Instagram",
+      label: "Visit us on Instagram",
+    },
+    {
+      href: "https://wa.me/message/MGKFJRGNVIJFF1",
+      src: "/WhatsApp.webp",
+      alt: "WhatsApp",
+      label: "Chat with us on WhatsApp",
+    },
+  ];
 
   return (
-    <footer
-      style={{
-        background: "linear-gradient(135deg, #6A0572, #A42CD6)",
-        padding: "40px 20px",
-        color: "#fff",
-        ...arialFont,
-      }}
-    >
-      <div
-        style={{
-          maxWidth: "1200px",
-          margin: "0 auto",
-          display: "flex",
-          flexWrap: "wrap",
-          justifyContent: "space-between",
-          ...arialFont,
-        }}
-      >
-        {/* Logo Section */}
-        <div style={{ flex: "1 1 250px", marginBottom: "20px" }}>
-          <img
-            src={Logo}
-            alt="Logo"
-            style={{
-              width: "120px",
-              height: "auto",
-              borderRadius: "50%",
-            }}
-          />
+    <footer className="site-footer">
+      {/* Soft starry glow layers */}
+      <div className="footer-auras" aria-hidden="true">
+        <span className="aura aura-violet" />
+        <span className="aura aura-rose" />
+      </div>
+
+      <div className="footer-inner footer-inner--two">
+        {/* Brand */}
+        <div className="footer-brand">
+          <img className="footer-logo" src={Logo} alt="Sree Krishna Logo" />
+          <div className="brand-text">
+            <h5 className="brand-title">
+              Sree Krishna Tarot Reading & Healing
+            </h5>
+            <p className="brand-tagline">
+              Intuitive guidance, Reiki-assisted healing, and calm clarity.
+            </p>
+          </div>
         </div>
 
-        {/* Quick Links */}
-        <div style={{ flex: "1 1 250px", marginBottom: "20px" }}>
-          <h5
-            style={{
-              ...arialFont,
-              fontWeight: "bold",
-              marginBottom: "16px",
-              textTransform: "uppercase",
-              fontSize: "18px",
-            }}
-          >
-            Quick Links
-          </h5>
-          <ul style={{ listStyleType: "none", padding: 0 }}>
-            <li style={{ marginBottom: "8px" }}>
-              <a
-                href="#services"
-                style={{
-                  ...arialFont,
-                  color: "#FFD700",
-                  textDecoration: "none",
-                }}
-              >
-                Services
-              </a>
-            </li>
-            <li style={{ marginBottom: "8px" }}>
-              <a
-                href="#contact"
-                style={{
-                  ...arialFont,
-                  color: "#FFD700",
-                  textDecoration: "none",
-                }}
-              >
-                Contact Us
-              </a>
-            </li>
-            <li>
-              <a
-                href="#privacy"
-                style={{
-                  ...arialFont,
-                  color: "#FFD700",
-                  textDecoration: "none",
-                }}
-              >
-                Privacy Policy
-              </a>
-            </li>
-          </ul>
-        </div>
-
-        {/* Social Media */}
-        <div style={{ flex: "1 1 250px", marginBottom: "20px" }}>
-          <h5
-            style={{
-              ...arialFont,
-              fontWeight: "bold",
-              marginBottom: "16px",
-              textTransform: "uppercase",
-              fontSize: "18px",
-            }}
-          >
-            Follow Us
-          </h5>
-          <div style={{ display: "flex", gap: "12px" }}>
-            {[
-              {
-                href: "https://www.facebook.com/DivineTarotMediumHealerMeghna/",
-                src: "/facebook.webp",
-                alt: "Facebook",
-              },
-              {
-                href: "https://www.instagram.com/divinetarotmediumhealermeghna/",
-                src: "/images.jpeg",
-                alt: "Instagram",
-              },
-              {
-                href: "https://wa.me/message/MGKFJRGNVIJFF1",
-                src: "/WhatsApp.webp",
-                alt: "WhatsApp",
-              },
-            ].map(({ href, src, alt }) => (
+        {/* Social */}
+        <div className="footer-social">
+          <h6 className="footer-heading">Follow Us</h6>
+          <div className="social-row">
+            {socials.map(({ href, src, alt, label }) => (
               <a
                 key={alt}
                 href={href}
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label={label}
+                className="social-link"
               >
-                <img
-                  src={src}
-                  alt={alt}
-                  style={{
-                    width: "35px",
-                    height: "35px",
-                    borderRadius: "50%",
-                    backgroundColor: "#fff",
-                    padding: "6px",
-                    transition: "transform 0.3s",
-                  }}
-                  onMouseOver={(e) =>
-                    (e.currentTarget.style.transform = "scale(1.1)")
-                  }
-                  onMouseOut={(e) =>
-                    (e.currentTarget.style.transform = "scale(1)")
-                  }
-                />
+                <img className="social-icon" src={src} alt={alt} />
               </a>
             ))}
           </div>
         </div>
       </div>
 
-      {/* Divider */}
-      <div
-        style={{
-          borderTop: "1px solid rgba(255, 255, 255, 0.3)",
-          marginTop: "30px",
-        }}
-      ></div>
+      <hr className="footer-divider" />
 
-      {/* Footer Text */}
-      <div
-        style={{
-          textAlign: "center",
-          marginTop: "20px",
-          color: "rgba(255, 255, 255, 0.7)",
-          ...arialFont,
-        }}
-      >
-        © {new Date().getFullYear()} Sree Krishna Enlightened Tarot Healing and
-        Reading. All rights reserved.
+      <div className="footer-bottom">
+        <div className="copy">
+          © {year} Sree Krishna Enlightened Tarot Healing and Reading. All
+          rights reserved.
+        </div>
       </div>
     </footer>
   );

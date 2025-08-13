@@ -1,9 +1,4 @@
 import React, { useState, useEffect } from "react";
-// display the grid from today to the 14th day from today
-// if a particular slot doesnt exist in the database then show the slot as unbooked
-// if that slot(day,timing) exists in the database then show that its booked
-// proceed/payment flow unchanged
-
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -17,7 +12,9 @@ const Booking = () => {
 
   const timeSlots = ["3pm-5pm", "5pm-7pm", "7pm-9pm"];
   const notifyOverSelection = () =>
-    toast.error(`You can only select ${slotCount} slots`);
+    toast.error(
+      `You can only select ${slotCount} slot${slotCount > 1 ? "s" : ""}`
+    );
 
   const [selectedSlots, setSelectedSlots] = useState([]); // ["<prettyDate>-<time>"]
   const [bookedSlots, setBookedSlots] = useState([]); // same key format
@@ -29,18 +26,18 @@ const Booking = () => {
     day: "numeric",
   };
 
-  // ---- build the next 14 day labels EXACTLY like in DB ----
+  // Build the next 14 day labels EXACTLY like in DB
   function generateNext14Days() {
     const days = [];
     for (let i = 0; i < 14; i++) {
       const d = new Date();
       d.setDate(d.getDate() + i);
-      days.push(d.toLocaleDateString("en-US", DATE_FMT)); // e.g., "Tuesday, Aug 19, 2025"
+      days.push(d.toLocaleDateString("en-US", DATE_FMT)); // e.g. "Tuesday, Aug 19, 2025"
     }
     return days;
   }
 
-  // ---- fetch booked slots and build keys like "<prettyDate>-<time>" ----
+  // Fetch booked slots and build keys like "<prettyDate>-<time>"
   useEffect(() => {
     (async () => {
       const res = await fetch(`${process.env.REACT_APP_API_BASE_URL}/slot`);
@@ -49,15 +46,18 @@ const Booking = () => {
         return;
       }
       const data = await res.json();
-      // IMPORTANT: your DB uses 'time', not 'slot'
-      const booked = Array.isArray(data)
-        ? data.map((it) => `${it.date}-${it.time}`)
+
+      // Only grey out non-available slots
+      const raw = Array.isArray(data)
+        ? data
+            .filter((it) => it.status !== "available") // booked or pending
+            .map((it) => `${it.date}-${it.time}`)
         : [];
-      setBookedSlots(booked);
-      // Optional: debug
-      // console.log("Booked keys:", booked);
+
+      // De-duplicate just in case
+      setBookedSlots([...new Set(raw)]);
     })();
-  }, []); // runs only once on component mount
+  }, []);
 
   const handleSlotSelect = (day, slot) => {
     const key = `${day}-${slot}`;
@@ -84,7 +84,7 @@ const Booking = () => {
 
     const API = process.env.REACT_APP_API_BASE_URL;
 
-    // ADDED: tiny helper to release held slots
+    // Release held slots helper
     const releaseHolds = async () => {
       await fetch(`${API}/slot/release`, {
         method: "POST",
@@ -106,7 +106,7 @@ const Booking = () => {
 
     const order = await response.json();
 
-    var options = {
+    const options = {
       key: razorpayKey,
       amount: order.amount,
       currency: "INR",
@@ -115,7 +115,6 @@ const Booking = () => {
       image: "../assets/images/Logo.png",
       order_id: order.id,
 
-      // ADDED: release if the checkout is closed
       modal: {
         ondismiss: async function () {
           await releaseHolds();
@@ -142,10 +141,8 @@ const Booking = () => {
             body: JSON.stringify({ heldSlots }),
             headers: { "Content-Type": "application/json" },
           });
-
           navigate("/success");
         } else {
-          // ADDED: release if verification fails
           await releaseHolds();
           toast.error("Payment verification failed. Slots released.");
         }
@@ -156,19 +153,16 @@ const Booking = () => {
         email: user.email,
       },
       notes: { address: "Razorpay Corporate Office" },
-      theme: { color: "#3399cc" },
+      theme: { color: "#8b5cf6" }, // violet theme
       retry: { enabled: false },
       timeout: 180,
     };
 
     const rzp = new window.Razorpay(options);
-
-    // ADDED: release if payment fails event fires
     rzp.on("payment.failed", async function () {
       await releaseHolds();
       toast.error("Payment failed. Slots released.");
     });
-
     rzp.open();
   };
 
@@ -189,13 +183,19 @@ const Booking = () => {
   };
 
   return (
-    <div className="text-center">
+    <div className="booking-root text-center">
       <Toaster />
-      <h1>{`Select ${slotCount} slot${
-        slotCount > 1 ? "s" : ""
-      } from the table`}</h1>
+      <h1 className="booking-title">
+        Select {slotCount} slot{slotCount > 1 ? "s" : ""} from the table
+      </h1>
+
       <div className="container mt-4">
-        <table className="table table-bordered text-center">
+        <div className="booking-legend">
+          <span className="legend-chip selected">Selected</span>
+          <span className="legend-chip booked">Booked/Pending</span>
+        </div>
+
+        <table className="table table-bordered text-center booking-table">
           <thead className="table-dark">
             <tr>
               <th>Date</th>
@@ -207,7 +207,7 @@ const Booking = () => {
           <tbody>
             {generateNext14Days().map((day, rowIndex) => (
               <tr key={rowIndex}>
-                <td>{day}</td>
+                <td className="date-cell">{day}</td>
                 {timeSlots.map((slot, colIndex) => {
                   const cellKey = `${day}-${slot}`;
                   const isSelected = selectedSlots.includes(cellKey);
@@ -219,6 +219,7 @@ const Booking = () => {
                         isBooked ? "booked" : isSelected ? "selected" : ""
                       }`}
                       onClick={() => !isBooked && handleSlotSelect(day, slot)}
+                      aria-disabled={isBooked}
                     >
                       {isBooked ? "Booked" : isSelected ? "Selected" : "Select"}
                     </td>
@@ -233,8 +234,14 @@ const Booking = () => {
           <div className="container mb-4 d-flex justify-content-center">
             <button
               type="button"
-              className="btn btn-primary"
+              className="btn btn-primary booking-proceed"
               onClick={handleProceed}
+              disabled={selectedSlots.length === 0}
+              title={
+                selectedSlots.length === 0
+                  ? "Select at least one slot"
+                  : "Proceed"
+              }
             >
               Proceed
             </button>

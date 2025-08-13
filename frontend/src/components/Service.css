@@ -1,0 +1,142 @@
+/* Service Card — premium tarot style (purple/rose), reuses App.css tokens */
+
+.service-card {
+  background: #fff;
+  border-radius: var(--radius-2, 15px);
+  border: 1px solid rgba(139, 92, 246, 0.12);
+  box-shadow: 0 6px 16px rgba(139, 92, 246, 0.10);
+  max-width: 300px;
+  margin: 20px auto;
+  overflow: hidden;
+  transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+  position: relative;
+  isolation: isolate;
+}
+.service-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 28px rgba(139, 92, 246, 0.18), 0 6px 14px rgba(244, 63, 94, 0.10);
+  border-color: rgba(139, 92, 246, 0.22);
+}
+
+/* Subtle top glow */
+.service-card::before {
+  content: "";
+  position: absolute;
+  inset: -2px -2px auto -2px;
+  height: 60px;
+  background: linear-gradient(90deg, var(--violet-600, #7c3aed), var(--rose-500, #f43f5e));
+  opacity: .08;
+  filter: blur(12px);
+  z-index: -1;
+}
+
+/* Media */
+.service-media {
+  display: block;
+  text-decoration: none;
+}
+.service-media img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  display: block;
+  background: #f6f5fb;
+}
+
+/* Body */
+.service-body {
+  padding: 14px 14px 16px 14px;
+  text-align: center;
+}
+.service-name {
+  margin: 6px 0 6px 0;
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--violet-700, #6d28d9);
+  letter-spacing: .2px;
+}
+
+/* Pricing */
+.service-price {
+  margin-top: 2px;
+  margin-bottom: 6px;
+}
+.service-price.stack {
+  display: grid;
+  gap: 4px;
+}
+.price-primary {
+  font-weight: 700;
+  color: var(--accent, #f43f5e);
+  font-size: 16px;
+}
+.price-note {
+  font-weight: 700;
+  color: var(--brand, #8b5cf6);
+  font-size: 15px;
+}
+.price-note .muted {
+  font-weight: 600;
+  color: var(--slate-600, #475569);
+  margin-left: 4px;
+  font-size: 13px;
+}
+
+/* Description */
+.service-desc {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  color: var(--slate-700, #334155);
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 8px 4px 12px;
+}
+
+/* Actions */
+.service-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.btn-ghost, .btn-brand {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform .18s ease, background .18s ease, color .18s ease, border-color .18s ease, box-shadow .18s ease;
+}
+
+/* Secondary */
+.btn-ghost {
+  background: rgba(139, 92, 246, 0.08);
+  color: var(--violet-700, #6d28d9);
+  border: 1px solid rgba(139, 92, 246, 0.22);
+}
+.btn-ghost:hover {
+  background: rgba(139, 92, 246, 0.14);
+  transform: translateY(-1px);
+}
+
+/* Primary */
+.btn-brand {
+  background: var(--brand, #8b5cf6);
+  color: #fff;
+  border: 1px solid var(--brand, #8b5cf6);
+  box-shadow: 0 10px 22px rgba(139, 92, 246, 0.22);
+}
+.btn-brand:hover {
+  background: var(--brand-strong, #7c3aed);
+  transform: translateY(-1px);
+  box-shadow: 0 14px 28px rgba(139, 92, 246, 0.26);
+}
+
+/* Small screens */
+@media (max-width: 380px) {
+  .service-card { max-width: 92%; }
+  .service-media img { height: 220px; }
+}

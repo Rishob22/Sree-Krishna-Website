@@ -1,0 +1,160 @@
+/* Navbar — Tarot purple/rose, uses tokens from App.css */
+
+.navbar-root {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(10px);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.82)),
+    radial-gradient(1000px 480px at -10% -20%, rgba(139, 92, 246, 0.08), transparent 60%),
+    radial-gradient(900px 420px at 110% -10%, rgba(244, 63, 94, 0.06), transparent 60%);
+  border-bottom: 1px solid rgba(139, 92, 246, 0.12);
+  box-shadow: 0 6px 18px rgba(139, 92, 246, 0.08);
+}
+.navbar-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+.brand-logo {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow:
+    0 6px 14px rgba(0,0,0,0.12),
+    0 0 0 4px rgba(237,233,254,0.5);
+}
+.brand-name {
+  font-family: 'Cinzel Decorative', serif;
+  font-weight: 700;
+  color: var(--violet-700);
+  letter-spacing: .3px;
+}
+
+/* Links */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: clamp(14px, 4vw, 28px);
+}
+.nav-auth {
+  display: inline-flex;
+  gap: 14px;
+}
+
+.nav-link {
+  position: relative;
+  text-decoration: none;
+  font-family: 'Cinzel Decorative', serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--slate-700);
+  transform: translateY(0);
+  transition: transform .18s ease, color .18s ease, opacity .18s ease;
+}
+.nav-link:hover {
+  transform: translateY(-1px);
+  color: var(--violet-700);
+}
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0; bottom: -6px;
+  width: 0%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--violet-600), var(--rose-500));
+  transition: width .22s ease;
+}
+.nav-link:hover::after {
+  width: 100%;
+}
+
+.nav-greeting {
+  font-weight: 700;
+  color: var(--violet-700);
+  white-space: nowrap;
+}
+
+/* Mobile helpers */
+.d-none-xs { display: none; }
+.d-only-xs { display: inline-flex; }
+
+@media (min-width: 600px) {
+  .d-none-xs { display: inline-flex; }
+  .d-only-xs { display: none; }
+}
+.d-none-sm {
+  display: none;
+}
+@media (min-width: 900px) {
+  .d-none-sm { display: inline; }
+}
+
+/* Buttons (drawer) */
+.btn-ghost {
+  background: rgba(139, 92, 246, 0.10);
+  color: var(--violet-700);
+  border: 1px solid rgba(139, 92, 246, 0.25);
+  font-weight: 700;
+  padding: 10px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background .2s ease, transform .2s ease;
+}
+.btn-ghost:hover {
+  background: rgba(139, 92, 246, 0.18);
+  transform: translateY(-1px);
+}
+
+/* Floating cart button */
+.cart-fab {
+  position: fixed;
+  bottom: 22px;
+  right: 20px;
+  z-index: 110;
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  border: 1px solid var(--brand);
+  background: radial-gradient(120px 80px at 30% -10%, rgba(139,92,246,.18), transparent 60%), #fff;
+  color: var(--violet-700);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 12px 28px rgba(139, 92, 246, 0.22);
+  cursor: pointer;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.cart-fab:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 32px rgba(139, 92, 246, 0.26);
+}
+.cart-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 14px rgba(244, 63, 94, 0.30);
+}

@@ -1,0 +1,106 @@
+/* ProfileBookingsPage.css */
+
+/* Scope everything to this page wrapper */
+.theme-aurora {
+  /* Brand: purple + rose (no blue) */
+  --bs-primary: #8b5cf6;              /* violet-500 */
+  --bs-primary-rgb: 139, 92, 246;
+  --bs-link-color: #a21caf;           /* purple-700 */
+  --bs-link-hover-color: #86198f;     /* purple-800 */
+  --bs-focus-ring-color: rgba(139, 92, 246, .25);
+
+  /* Subtle backgrounds */
+  --bs-primary-bg-subtle: #ede9fe;    /* violet-100 */
+  --bs-primary-border-subtle: #e9d5ff;
+
+  /* Optional: tone down secondary text slightly */
+  --bs-secondary-color: #6b7280;      /* slate-ish */
+}
+
+/* Page background (white → rose → lavender) */
+.theme-aurora {
+  background: linear-gradient(180deg, #ffffff 0%, #fdf2f8 45%, #faf5ff 100%);
+}
+
+/* Buttons: force purple */
+.theme-aurora .btn-primary {
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
+}
+.theme-aurora .btn-primary:hover,
+.theme-aurora .btn-primary:focus {
+  background-color: #7c3aed;          /* violet-600 */
+  border-color: #7c3aed;
+}
+.theme-aurora .btn-outline-primary {
+  color: var(--bs-primary);
+  border-color: var(--bs-primary);
+}
+.theme-aurora .btn-outline-primary:hover {
+  background-color: rgba(139, 92, 246, 0.08);
+  border-color: #7c3aed;
+}
+
+/* Links (including .btn-link, .link-primary) → purple */
+.theme-aurora a,
+.theme-aurora .btn-link,
+.theme-aurora .link-primary {
+  color: var(--bs-link-color);
+}
+.theme-aurora a:hover,
+.theme-aurora .btn-link:hover,
+.theme-aurora .link-primary:hover {
+  color: var(--bs-link-hover-color);
+}
+
+/* Pills → purple */
+.theme-aurora .nav-pills .nav-link.active {
+  background-color: var(--bs-primary);
+}
+
+/* Card glow + borders (purple tint) */
+.card-glow {
+  transition: box-shadow .25s ease, transform .2s ease;
+  border: 1px solid rgba(139, 92, 246, 0.10);
+}
+.card-glow:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 8px 24px rgba(139, 92, 246, 0.14),
+    0 2px 8px rgba(225, 29, 72, 0.08); /* rose glow */
+}
+
+/* Soft panel (empty state) */
+.bg-soft-panel {
+  background: linear-gradient(180deg, #fff 0%, #faf5ff 50%, #fdf2f8 100%);
+}
+
+/* Avatar halo */
+.avatar-ring {
+  box-shadow:
+    0 0 0 4px rgba(139, 92, 246, 0.09),
+    0 10px 20px rgba(139, 92, 246, 0.08);
+}
+
+/* Badges (status chips) */
+.badge-violet {
+  background: #ede9fe;   /* violet-100 */
+  color: #5b21b6;        /* violet-800 */
+  border: 1px solid #e9d5ff;
+}
+.badge-rose {
+  background: #ffe4f1;   /* rose-100 */
+  color: #9d174d;        /* rose-800 */
+  border: 1px solid #fecdd3;
+}
+.badge-lavender {
+  background: #f5f3ff;   /* lavender-ish */
+  color: #6b21a8;        /* purple-800 */
+  border: 1px solid #e9d5ff;
+}
+
+/* Modal subtle purple shadow */
+.theme-aurora .modal-content {
+  border: 1px solid rgba(139, 92, 246, 0.10);
+  box-shadow: 0 20px 40px rgba(139, 92, 246, 0.14);
+}
