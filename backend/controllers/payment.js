@@ -1,5 +1,6 @@
 const Slot = require("../models/slot.js");
 const Razorpay = require("razorpay");
+const crypto = require("crypto");
 //environment variables
 const { RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET } = process.env;
 

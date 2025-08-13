@@ -11,6 +11,7 @@ import Booking from "./pages/Booking";
 import ContactUs from "./pages/ContactUs";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
+import Success from "./pages/Success";
 import { useEffect } from "react";
 const App = () => {
   //app returns the structure
@@ -27,6 +28,7 @@ const App = () => {
           <Route path="/booking-page" element={<Booking />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
+          <Route path="/success" element={<Success />} />
         </Routes>
         <Footer />
       </StateContext>
