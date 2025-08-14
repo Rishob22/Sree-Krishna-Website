@@ -173,34 +173,7 @@ const Navbar = () => {
 
           <List sx={{ px: 1 }}>
             {/* Profile at top in mobile menu */}
-            {!user && (
-              <ListItem disablePadding>
-                <ListItemButton onClick={handleLogin} sx={{ borderRadius: 2 }}>
-                  <ListItemText
-                    primary="Login"
-                    primaryTypographyProps={{
-                      fontSize: 18,
-                      fontWeight: 700,
-                      sx: { color: "var(--violet-700)" },
-                    }}
-                  />
-                </ListItemButton>
-              </ListItem>
-            )}
-            {!user && (
-              <ListItem disablePadding>
-                <ListItemButton onClick={handleSignup} sx={{ borderRadius: 2 }}>
-                  <ListItemText
-                    primary="Signup"
-                    primaryTypographyProps={{
-                      fontSize: 18,
-                      fontWeight: 700,
-                      sx: { color: "var(--violet-700)" },
-                    }}
-                  />
-                </ListItemButton>
-              </ListItem>
-            )}
+
             {user && (
               <ListItem disablePadding>
                 <ListItemButton

@@ -85,6 +85,9 @@ const Success = () => {
           <a href="/" style={btn}>
             Go to Home
           </a>
+          <a href="/profile" style={btn}>
+            Go to Bookings
+          </a>
         </div>
       </div>
     </div>
