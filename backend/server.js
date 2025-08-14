@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const allowedOrigins = [
+  "https://www.sreekrishnahealing.com",
   "http://localhost:3000",
   "https://sree-krishna-website.vercel.app",
   "https://sree-krishna-website-kotxhmfez-rishob-mondals-projects.vercel.app",
