@@ -1,0 +1,4 @@
+Next step : 
+-> There is some issue with the releaseHolds function after the booking is failed(fairly simple issue its supposed to be)
+->Add email verification at login
+->Add the admin page for controlling the bookings(booking control is another chapter )

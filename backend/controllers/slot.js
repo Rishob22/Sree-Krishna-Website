@@ -1,4 +1,5 @@
 const Slot = require("../models/slot.js");
+const sendMail = require("../services/mailSend.js");
 const findSlotDetails = (mySlot) => {
   const ind = mySlot.indexOf("-");
   const date = mySlot.slice(0, ind).trim();
@@ -17,6 +18,7 @@ async function rollback(slots) {
 async function getSlots(req, res) {
   try {
     // 2. Return all slots (or filter by date if you want)
+
     const slots = await Slot.find();
     res.status(200).json(slots);
   } catch (err) {
@@ -27,6 +29,7 @@ async function getSlots(req, res) {
 // POST /slots/hold - Hold a slot temporarily
 //  -> takes date,time,userId from user
 async function holdSlot(req, res) {
+  console.log("Controller reached ");
   const { userId, selectedSlots } = req.body;
   async function holdSlotFor(date, time, userId) {
     let slot = await Slot.findOne({ date, time });
@@ -80,7 +83,7 @@ async function confirmSlot(req, res) {
         $unset: { holdUntil: 1 },
       },
       { new: true }
-    );
+    ).populate("userId");
     //following handles those cases where the slot is held,payment is done but has expired and has been cleared by api call by another user
     if (!slot)
       slot = await Slot.create({
@@ -88,9 +91,20 @@ async function confirmSlot(req, res) {
         time,
         status: "booked",
         userId,
-      });
-    if (slot) confirmedSlots = [...confirmedSlots, slot];
-    else {
+      }).populate("userId");
+    if (slot) {
+      //then add the confirmed slot to the list of slots and send the confirmation mail
+      confirmedSlots = [...confirmedSlots, slot];
+
+      //sends mail to the user for each and every slot booked
+      const { userId, date, time } = slot; //gets the field values from a single slot
+      let sub = "Congratulations!You have a slot!";
+      let msg = `Your slot with Meghna at ${time} for 2 hours on ${date}`;
+      const mail = await sendMail(userId.email, sub, msg); //sends the mail and waits for the confirmation
+      if (mail) console.log(`Mail sent for ${date} ${time} slot `);
+      else
+        console.log("Failed to log the message after verifying the booking ");
+    } else {
       await rollback(confirmedSlots);
       console.log("Could not confirm all the held slots,so rolling back");
       return res.status(500).json({ status: "failure" });
