@@ -98,7 +98,7 @@ async function confirmSlot(req, res) {
 
       //sends mail to the user for each and every slot booked
       const { userId, date, time } = slot; //gets the field values from a single slot
-      let sub = "Congratulations!You have a slot!";
+      let sub = "Congratulations!Your booking is confirmed!";
       let msg = `Your slot with Meghna at ${time} for 2 hours on ${date}`;
       const mail = await sendMail(userId.email, sub, msg); //sends the mail and waits for the confirmation
       if (mail) console.log(`Mail sent for ${date} ${time} slot `);
