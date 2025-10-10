@@ -1,20 +1,34 @@
+require("dotenv").config();
 const nodemailer = require("nodemailer");
 const transporter = nodemailer.createTransport({
   secure: true,
-  service: "gmail",
+  tls: {
+    rejectUnauthorized: false,
+  },
+  host: "smtp.gmail.com",
   port: 465,
   auth: {
-    user: "sreekrishnahealing@gmail.com",
-    pass: process.env.APP_PASSWORD,
+    user: process.env.BUSINESS_EMAIL,
+    pass: process.env.SMTP_APP_PASSWORD,
   },
 });
-function sendMail(to, sub, msg) {
-  transporter.sendMail({
+async function sendMail(to, sub, msg) {
+  const mailData = {
+    from: process.env.BUSINESS_EMAIL,
     to: to,
     subject: sub,
-    html: msg,
+    text: msg,
+  };
+  await new Promise((resolve, reject) => {
+    transporter.sendMail(mailData, (err, info) => {
+      if (err) {
+        console.error(err);
+        reject(err);
+      } else {
+        resolve(info);
+      }
+    });
   });
-  console.log("Email sent");
 }
 
 module.exports = sendMail;
